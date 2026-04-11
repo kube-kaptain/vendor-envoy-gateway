@@ -34,7 +34,7 @@ deployment:
         memory: 1024Mi
       requests:
         cpu: 100m
-        memory: 256Mi
+        memory: 1024Mi
     securityContext:
       allowPrivilegeEscalation: false
       capabilities:
@@ -60,7 +60,7 @@ deployment:
       port: 19001
       targetPort: 19001
   priorityClassName: null
-  replicas: 1
+  replicas: 3
   pod:
     affinity: {}
     annotations:
