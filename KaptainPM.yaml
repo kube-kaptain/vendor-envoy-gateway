@@ -1,0 +1,56 @@
+apiVersion: kaptain.org/1.8
+kind: kubernetes-app-vendor-helm-rendered
+metadata:
+  description: "Vendored Envoy Gateway helm chart rendered to plain kubernetes manifests"
+
+spec:
+  layers:
+    - layer-github-flow-strict:[1.2,2.0)
+  main:
+    vendorHelmRendered:
+      ociChart: 'oci://docker.io/envoyproxy/gateway-helm'
+      moveFiles:
+        - source: 'templates/certgen-rbac-0.yaml'
+          destination: 'serviceaccount-certgen.yaml'
+        - source: 'templates/certgen-rbac-1.yaml'
+          destination: 'role-certgen.yaml'
+        - source: 'templates/certgen-rbac-2.yaml'
+          destination: 'rolebinding-certgen.yaml'
+        - source: 'templates/certgen.yaml'
+          destination: 'job-certgen.yaml'
+        - source: 'templates/envoy-gateway-config.yaml'
+          destination: 'configmap-envoy-gateway-config.yaml'
+        - source: 'templates/envoy-gateway-deployment.yaml'
+          destination: 'deployment-envoy-gateway.yaml'
+        - source: 'templates/envoy-gateway-rbac-0.yaml'
+          destination: 'clusterrole-envoy-gateway-role.yaml'
+        - source: 'templates/envoy-gateway-rbac-1.yaml'
+          destination: 'clusterrolebinding-envoy-gateway-rolebinding.yaml'
+        - source: 'templates/envoy-gateway-service.yaml'
+          destination: 'service-envoy-gateway.yaml'
+        - source: 'templates/envoy-gateway-serviceaccount.yaml'
+          destination: 'serviceaccount-envoy-gateway.yaml'
+        - source: 'templates/infra-manager-rbac-0.yaml'
+          destination: 'role-infra-manager.yaml'
+        - source: 'templates/infra-manager-rbac-1.yaml'
+          destination: 'rolebinding-infra-manager.yaml'
+        - source: 'templates/leader-election-rbac-0.yaml'
+          destination: 'role-leader-election.yaml'
+        - source: 'templates/leader-election-rbac-1.yaml'
+          destination: 'rolebinding-leader-election.yaml'
+      imageRetags:
+        - sourceImageUri: 'docker.io/envoyproxy/gateway:v1.3.0'
+          tagSuffix: 'gateway'
+        - sourceImageUri: 'docker.io/envoyproxy/ratelimit:60d8e81b'
+          tagSuffix: 'ratelimit'
+  global:
+    release:
+      versioning:
+        maxParts: '4'
+        strategy: file-pattern-match
+        patternType: custom
+        source:
+          subPath: src/config
+          fileName: VendorHelmRenderedVersion
+          pattern: '^v([0-9]+\.[0-9]+\.[0-9]+)$'
+          prefixParts: '3'
