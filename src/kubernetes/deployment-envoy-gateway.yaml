@@ -17,7 +17,7 @@ metadata:
     app.kubernetes.io/managed-by: Kaptain
     app.kubernetes.io/version: ${Version}
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       control-plane: envoy-gateway
@@ -45,7 +45,7 @@ spec:
                   fieldPath: metadata.namespace
             - name: KUBERNETES_CLUSTER_DOMAIN
               value: cluster.local
-          image: docker.io/envoyproxy/gateway:v1.3.0
+          image: ${EnvironmentDockerRegistryAndNamespace}/${DockerImageName}:${DockerTag}-gateway
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
@@ -74,7 +74,7 @@ spec:
               memory: 1024Mi
             requests:
               cpu: 100m
-              memory: 256Mi
+              memory: 1024Mi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
