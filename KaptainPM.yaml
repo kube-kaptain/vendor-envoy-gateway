@@ -1,5 +1,5 @@
 apiVersion: kaptain.org/1.8
-kind: kubernetes-app-vendor-helm-rendered
+kind: kubernetes-bundle-vendor-helm-rendered
 metadata:
   description: "Vendored Envoy Gateway helm chart rendered to plain kubernetes manifests"
 
