@@ -43,6 +43,8 @@ spec:
           tagSuffix: 'gateway'
         - sourceImageUri: 'docker.io/envoyproxy/ratelimit:60d8e81b'
           tagSuffix: 'ratelimit'
+    hooks:
+      prePackagePrepare: .github/bin/fix-upstream-probes.bash
   global:
     release:
       versioning:

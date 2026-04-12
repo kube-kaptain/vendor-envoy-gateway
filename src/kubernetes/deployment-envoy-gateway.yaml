@@ -51,7 +51,6 @@ spec:
             httpGet:
               path: /healthz
               port: 8081
-            initialDelaySeconds: 15
             periodSeconds: 20
           name: envoy-gateway
           ports:
@@ -67,7 +66,6 @@ spec:
             httpGet:
               path: /readyz
               port: 8081
-            initialDelaySeconds: 5
             periodSeconds: 10
           resources:
             limits:
@@ -93,6 +91,12 @@ spec:
             - mountPath: /certs
               name: certs
               readOnly: true
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            periodSeconds: 1
+            failureThreshold: 30
       imagePullSecrets: []
       serviceAccountName: envoy-gateway
       terminationGracePeriodSeconds: 10
