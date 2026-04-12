@@ -2,7 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: vendor-envoy-gateway-gateway-helm-certgen
+  name: vendor-envoy-gateway-certgen
   namespace: '${Environment}'
   labels:
     helm.sh/chart: gateway-helm-v1.3.0
