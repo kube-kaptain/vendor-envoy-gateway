@@ -17,7 +17,7 @@ metadata:
     app.kubernetes.io/managed-by: Kaptain
     app.kubernetes.io/version: ${Version}
 spec:
-  replicas: 1
+  replicas: ${VendorEnvoyGateway/Replicas}
   selector:
     matchLabels:
       control-plane: envoy-gateway
@@ -71,10 +71,10 @@ spec:
             periodSeconds: 10
           resources:
             limits:
-              memory: 1024Mi
+              memory: ${VendorEnvoyGateway/Memory}
             requests:
-              cpu: 100m
-              memory: 256Mi
+              cpu: ${VendorEnvoyGateway/Cpu}
+              memory: ${VendorEnvoyGateway/Memory}
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

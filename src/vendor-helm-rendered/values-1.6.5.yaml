@@ -41,10 +41,10 @@ deployment:
     imagePullSecrets: []
     resources:
       limits:
-        memory: 1024Mi
+        memory: "${VendorEnvoyGateway/Memory}"
       requests:
-        cpu: 100m
-        memory: 256Mi
+        cpu: "${VendorEnvoyGateway/Cpu}"
+        memory: "${VendorEnvoyGateway/Memory}"
     securityContext:
       allowPrivilegeEscalation: false
       capabilities:
@@ -70,7 +70,7 @@ deployment:
       port: 19001
       targetPort: 19001
   priorityClassName: null
-  replicas: 1
+  replicas: "${VendorEnvoyGateway/Replicas}"
   pod:
     affinity: {}
     annotations:
