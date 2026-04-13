@@ -1,0 +1,44 @@
+# Source: gateway-helm/templates/envoy-gateway-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: envoy-gateway-config
+  namespace: '${Environment}'
+  labels:
+    helm.sh/chart: gateway-helm-1.6.5
+    app.kubernetes.io/name: gateway-helm
+    app.kubernetes.io/instance: vendor-envoy-gateway
+    app.kubernetes.io/version: "${Version}"
+    app.kubernetes.io/managed-by: Kaptain
+    kaptain.org/environment: ${Environment}
+  annotations:
+    kaptain.org/environment: ${Environment}
+    app.kubernetes.io/managed-by: Kaptain
+    app.kubernetes.io/version: ${Version}
+data:
+  envoy-gateway.yaml: |
+    apiVersion: gateway.envoyproxy.io/v1alpha1
+    kind: EnvoyGateway
+    extensionApis: {}
+    gateway:
+      controllerName: gateway.envoyproxy.io/gatewayclass-controller
+    logging:
+      level:
+        default: info
+    provider:
+      kubernetes:
+        rateLimitDeployment:
+          container:
+            image: ${EnvironmentDockerRegistryAndNamespace}/${DockerImageName}:${DockerTagRatelimit}
+          patch:
+            type: StrategicMerge
+            value:
+              spec:
+                template:
+                  spec:
+                    containers:
+                    - imagePullPolicy: IfNotPresent
+                      name: envoy-ratelimit
+        shutdownManager:
+          image: ${EnvironmentDockerRegistryAndNamespace}/${DockerImageName}:${DockerTagGateway}
+      type: Kubernetes

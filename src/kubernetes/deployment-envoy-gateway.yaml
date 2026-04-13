@@ -1,0 +1,112 @@
+# Source: gateway-helm/templates/envoy-gateway-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: envoy-gateway
+  namespace: '${Environment}'
+  labels:
+    control-plane: envoy-gateway
+    helm.sh/chart: gateway-helm-1.6.5
+    app.kubernetes.io/name: gateway-helm
+    app.kubernetes.io/instance: vendor-envoy-gateway
+    app.kubernetes.io/version: "${Version}"
+    app.kubernetes.io/managed-by: Kaptain
+    kaptain.org/environment: ${Environment}
+  annotations:
+    kaptain.org/environment: ${Environment}
+    app.kubernetes.io/managed-by: Kaptain
+    app.kubernetes.io/version: ${Version}
+spec:
+  replicas: ${VendorEnvoyGateway/Replicas}
+  selector:
+    matchLabels:
+      control-plane: envoy-gateway
+      app.kubernetes.io/name: gateway-helm
+      app.kubernetes.io/instance: vendor-envoy-gateway
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: "19001"
+        prometheus.io/scrape: "true"
+      labels:
+        control-plane: envoy-gateway
+        app.kubernetes.io/name: gateway-helm
+        app.kubernetes.io/instance: vendor-envoy-gateway
+    spec:
+      containers:
+        - args:
+            - server
+            - --config-path=/config/envoy-gateway.yaml
+          env:
+            - name: ENVOY_GATEWAY_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: KUBERNETES_CLUSTER_DOMAIN
+              value: cluster.local
+          image: ${EnvironmentDockerRegistryAndNamespace}/${DockerImageName}:${DockerTagGateway}
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            periodSeconds: 20
+          name: envoy-gateway
+          ports:
+            - containerPort: 18000
+              name: grpc
+            - containerPort: 18001
+              name: ratelimit
+            - containerPort: 18002
+              name: wasm
+            - containerPort: 19001
+              name: metrics
+            - name: webhook
+              containerPort: 9443
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8081
+            periodSeconds: 10
+          resources:
+            limits:
+              memory: ${VendorEnvoyGateway/Memory}
+            requests:
+              cpu: ${VendorEnvoyGateway/Cpu}
+              memory: ${VendorEnvoyGateway/Memory}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            runAsGroup: 65532
+            runAsNonRoot: true
+            runAsUser: 65532
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /config
+              name: envoy-gateway-config
+              readOnly: true
+            - mountPath: /certs
+              name: certs
+              readOnly: true
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            periodSeconds: 1
+            failureThreshold: 30
+      imagePullSecrets: []
+      serviceAccountName: envoy-gateway
+      terminationGracePeriodSeconds: 10
+      volumes:
+        - configMap:
+            defaultMode: 420
+            name: envoy-gateway-config
+          name: envoy-gateway-config
+        - name: certs
+          secret:
+            secretName: envoy-gateway
