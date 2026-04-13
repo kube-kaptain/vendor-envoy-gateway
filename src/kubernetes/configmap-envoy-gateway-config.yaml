@@ -28,7 +28,7 @@ data:
       kubernetes:
         rateLimitDeployment:
           container:
-            image: ${EnvironmentDockerRegistryAndNamespace}/${DockerImageName}:${DockerTag}-ratelimit
+            image: ${EnvironmentDockerRegistryAndNamespace}/${DockerImageName}:${DockerTagRatelimit}
           patch:
             type: StrategicMerge
             value:
@@ -39,5 +39,5 @@ data:
                     - imagePullPolicy: IfNotPresent
                       name: envoy-ratelimit
         shutdownManager:
-          image: ${EnvironmentDockerRegistryAndNamespace}/${DockerImageName}:${DockerTag}-gateway
+          image: ${EnvironmentDockerRegistryAndNamespace}/${DockerImageName}:${DockerTagGateway}
       type: Kubernetes
