@@ -1,4 +1,4 @@
-apiVersion: kaptain.org/1.8
+apiVersion: kaptain.org/1.9
 kind: kubernetes-bundle-vendor-helm-rendered
 metadata:
   description: "Vendored Envoy Gateway helm chart rendered to plain kubernetes manifests"
@@ -39,9 +39,9 @@ spec:
         - source: 'templates/leader-election-rbac-1.yaml'
           destination: 'rolebinding-leader-election.yaml'
       imageRetags:
-        - sourceImageUri: 'docker.io/envoyproxy/gateway:v1.3.0'
+        - sourceImageUri: 'docker.io/envoyproxy/gateway:v1.6.5'
           tagSuffix: 'gateway'
-        - sourceImageUri: 'docker.io/envoyproxy/ratelimit:60d8e81b'
+        - sourceImageUri: 'docker.io/envoyproxy/ratelimit:c8765e89'
           tagSuffix: 'ratelimit'
     hooks:
       prePackagePrepare: .github/bin/fix-upstream-probes.bash
@@ -54,5 +54,5 @@ spec:
         source:
           subPath: src/config
           fileName: VendorHelmRenderedVersion
-          pattern: '^v([0-9]+\.[0-9]+\.[0-9]+)$'
+          pattern: '^v?([0-9]+\.[0-9]+\.[0-9]+)$'
           prefixParts: '3'

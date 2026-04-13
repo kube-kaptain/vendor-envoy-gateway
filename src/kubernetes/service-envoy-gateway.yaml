@@ -6,7 +6,7 @@ metadata:
   namespace: '${Environment}'
   labels:
     control-plane: envoy-gateway
-    helm.sh/chart: gateway-helm-v1.3.0
+    helm.sh/chart: gateway-helm-1.6.5
     app.kubernetes.io/name: gateway-helm
     app.kubernetes.io/instance: vendor-envoy-gateway
     app.kubernetes.io/version: "${Version}"
@@ -17,6 +17,7 @@ metadata:
     app.kubernetes.io/managed-by: Kaptain
     app.kubernetes.io/version: ${Version}
 spec:
+  type: ClusterIP
   selector:
     control-plane: envoy-gateway
     app.kubernetes.io/name: gateway-helm
@@ -34,3 +35,6 @@ spec:
     - name: metrics
       port: 19001
       targetPort: 19001
+    - name: webhook
+      port: 9443
+      targetPort: 9443

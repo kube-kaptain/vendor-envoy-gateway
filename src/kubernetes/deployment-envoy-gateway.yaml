@@ -6,7 +6,7 @@ metadata:
   namespace: '${Environment}'
   labels:
     control-plane: envoy-gateway
-    helm.sh/chart: gateway-helm-v1.3.0
+    helm.sh/chart: gateway-helm-1.6.5
     app.kubernetes.io/name: gateway-helm
     app.kubernetes.io/instance: vendor-envoy-gateway
     app.kubernetes.io/version: "${Version}"
@@ -17,7 +17,7 @@ metadata:
     app.kubernetes.io/managed-by: Kaptain
     app.kubernetes.io/version: ${Version}
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       control-plane: envoy-gateway
@@ -62,6 +62,8 @@ spec:
               name: wasm
             - containerPort: 19001
               name: metrics
+            - name: webhook
+              containerPort: 9443
           readinessProbe:
             httpGet:
               path: /readyz
@@ -72,7 +74,7 @@ spec:
               memory: 1024Mi
             requests:
               cpu: 100m
-              memory: 1024Mi
+              memory: 256Mi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
