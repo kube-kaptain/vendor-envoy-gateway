@@ -39,9 +39,9 @@ spec:
         - source: 'templates/leader-election-rbac-1.yaml'
           destination: 'rolebinding-leader-election.yaml'
       imageRetags:
-        - sourceImageUri: 'docker.io/envoyproxy/gateway:v1.7.0'
+        - sourceImageUri: 'docker.io/envoyproxy/gateway:v1.7.1'
           tagSuffix: 'gateway'
-        - sourceImageUri: 'docker.io/envoyproxy/ratelimit:3fb70258'
+        - sourceImageUri: 'docker.io/envoyproxy/ratelimit:c8765e89'
           tagSuffix: 'ratelimit'
     hooks:
       prePackagePrepare: .github/bin/fix-upstream-probes.bash
