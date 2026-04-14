@@ -4,7 +4,7 @@ kind: ClusterRoleBinding
 metadata:
   name: 'vendor-envoy-gateway-certgen:${Environment}'
   labels:
-    helm.sh/chart: gateway-helm-1.6.5
+    helm.sh/chart: gateway-helm-1.7.0
     app.kubernetes.io/name: gateway-helm
     app.kubernetes.io/instance: vendor-envoy-gateway
     app.kubernetes.io/version: "${Version}"
