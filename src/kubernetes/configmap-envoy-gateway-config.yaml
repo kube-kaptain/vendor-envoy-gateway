@@ -21,12 +21,14 @@ data:
     kind: EnvoyGateway
     extensionApis: {}
     gateway:
-      controllerName: gateway.envoyproxy.io/gatewayclass-controller
+      controllerName: gateway.envoyproxy.io/${Environment}-gatewayclass-controller
     logging:
       level:
         default: info
     provider:
       kubernetes:
+        deploy:
+          type: GatewayNamespace
         rateLimitDeployment:
           container:
             image: ${EnvironmentDockerRegistryAndNamespace}/${DockerImageName}:${DockerTagRatelimit}
@@ -42,3 +44,6 @@ data:
         shutdownManager:
           image: ${EnvironmentDockerRegistryAndNamespace}/${DockerImageName}:${DockerTagGateway}
       type: Kubernetes
+      watch:
+        type: Namespaces
+        namespaces: [${VendorEnvoyGateway/NamespaceList}]

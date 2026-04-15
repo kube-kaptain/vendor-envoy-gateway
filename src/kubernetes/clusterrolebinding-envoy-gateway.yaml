@@ -2,7 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: vendor-envoy-gateway-envoy-gateway-rolebinding
+  name: ${Environment}:vendor-envoy-gateway-envoy-gateway
   labels:
     kaptain.org/environment: ${Environment}
     app.kubernetes.io/managed-by: Kaptain
@@ -14,7 +14,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: vendor-envoy-gateway-envoy-gateway-role
+  name: ${Environment}:vendor-envoy-gateway-envoy-gateway
 subjects:
   - kind: ServiceAccount
     name: 'envoy-gateway'

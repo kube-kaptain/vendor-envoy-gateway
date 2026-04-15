@@ -1,9 +1,8 @@
 # Source: gateway-helm/templates/certgen-rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRoleBinding
 metadata:
-  name: vendor-envoy-gateway-certgen
-  namespace: '${Environment}'
+  name: '${Environment}:vendor-envoy-gateway-certgen'
   labels:
     helm.sh/chart: gateway-helm-1.7.1
     app.kubernetes.io/name: gateway-helm
@@ -17,12 +16,11 @@ metadata:
     kaptain.org/environment: ${Environment}
     app.kubernetes.io/managed-by: Kaptain
     app.kubernetes.io/version: ${Version}
-rules:
-  - apiGroups:
-      - ""
-    resources:
-      - secrets
-    verbs:
-      - get
-      - create
-      - update
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: '${Environment}:vendor-envoy-gateway-certgen'
+subjects:
+  - kind: ServiceAccount
+    name: 'vendor-envoy-gateway-certgen'
+    namespace: '${Environment}'

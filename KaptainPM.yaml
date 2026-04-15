@@ -13,9 +13,9 @@ spec:
         - source: 'templates/certgen-rbac-0.yaml'
           destination: 'serviceaccount-certgen.yaml'
         - source: 'templates/certgen-rbac-1.yaml'
-          destination: 'role-certgen.yaml'
+          destination: 'clusterrole-certgen.yaml'
         - source: 'templates/certgen-rbac-2.yaml'
-          destination: 'rolebinding-certgen.yaml'
+          destination: 'clusterrolebinding-certgen.yaml'
         - source: 'templates/certgen.yaml'
           destination: 'job-certgen.yaml'
         - source: 'templates/envoy-gateway-config.yaml'
@@ -23,9 +23,9 @@ spec:
         - source: 'templates/envoy-gateway-deployment.yaml'
           destination: 'deployment-envoy-gateway.yaml'
         - source: 'templates/envoy-gateway-rbac-0.yaml'
-          destination: 'clusterrole-envoy-gateway-role.yaml'
+          destination: 'clusterrole-envoy-gateway.yaml'
         - source: 'templates/envoy-gateway-rbac-1.yaml'
-          destination: 'clusterrolebinding-envoy-gateway-rolebinding.yaml'
+          destination: 'clusterrolebinding-envoy-gateway.yaml'
         - source: 'templates/envoy-gateway-service.yaml'
           destination: 'service-envoy-gateway.yaml'
         - source: 'templates/envoy-gateway-serviceaccount.yaml'
@@ -38,6 +38,48 @@ spec:
           destination: 'role-leader-election.yaml'
         - source: 'templates/leader-election-rbac-1.yaml'
           destination: 'rolebinding-leader-election.yaml'
+        - source: 'templates/certgen-rbac-3.yaml'
+          destination: 'role-certgen.yaml'
+        - source: 'templates/certgen-rbac-4.yaml'
+          destination: 'rolebinding-certgen.yaml'
+        - source: 'templates/envoy-proxy-topology-injector-webhook.yaml'
+          destination: 'mutatingwebhookconfiguration-topology-injector.yaml'
+      sedReplace:
+        perFile:
+          - file: 'configmap-envoy-gateway-config.yaml'
+            patterns:
+              - 's|gateway.envoyproxy.io/gatewayclass-controller|gateway.envoyproxy.io/${Environment}-gatewayclass-controller|'
+              - 's|^      type: Kubernetes$|      type: Kubernetes\n      watch:\n        type: Namespaces\n        namespaces: [${VendorEnvoyGateway/NamespaceList}]|'
+              - 's|^      kubernetes:$|      kubernetes:\n        deploy:\n          type: GatewayNamespace|'
+      yqTransform:
+        perFile:
+          - file: 'clusterrole-certgen.yaml'
+            expressions:
+              - '.metadata.name |= sub(":\$\{Environment\}$", "")'
+              - '.metadata.name = "${Environment}:" + .metadata.name'
+              - '.rules[1].resourceNames[0] |= sub("\.\$\{Environment\}$", "")'
+              - '.rules[1].resourceNames[0] = "${Environment}:" + .rules[1].resourceNames[0]'
+          - file: 'clusterrole-envoy-gateway.yaml'
+            expressions:
+              - '.metadata.name |= sub("-role$", "")'
+              - '.metadata.name = "${Environment}:" + .metadata.name'
+          - file: 'clusterrolebinding-certgen.yaml'
+            expressions:
+              - '.metadata.name |= sub(":\$\{Environment\}$", "")'
+              - '.roleRef.name |= sub(":\$\{Environment\}$", "")'
+              - '.metadata.name = "${Environment}:" + .metadata.name'
+              - '.roleRef.name = "${Environment}:" + .roleRef.name'
+          - file: 'mutatingwebhookconfiguration-topology-injector.yaml'
+            expressions:
+              - '.metadata.name |= sub("\.\$\{Environment\}$", "")'
+              - '.metadata.name = "${Environment}:" + .metadata.name'
+              - '.webhooks[0].namespaceSelector = {"matchLabels": "KAPTAIN_TOPOLOGY_PLACEHOLDER"}'
+          - file: 'clusterrolebinding-envoy-gateway.yaml'
+            expressions:
+              - '.metadata.name |= sub("-rolebinding$", "")'
+              - '.roleRef.name |= sub("-role$", "")'
+              - '.metadata.name = "${Environment}:" + .metadata.name'
+              - '.roleRef.name = "${Environment}:" + .roleRef.name'
       imageRetags:
         - sourceImageUri: 'docker.io/envoyproxy/gateway:v1.7.1'
           tagSuffix: 'gateway'

@@ -1,9 +1,8 @@
 # Source: gateway-helm/templates/certgen-rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
-  name: vendor-envoy-gateway-certgen
-  namespace: '${Environment}'
+  name: '${Environment}:vendor-envoy-gateway-certgen'
   labels:
     helm.sh/chart: gateway-helm-1.7.1
     app.kubernetes.io/name: gateway-helm
@@ -19,10 +18,19 @@ metadata:
     app.kubernetes.io/version: ${Version}
 rules:
   - apiGroups:
-      - ""
+      - admissionregistration.k8s.io
     resources:
-      - secrets
+      - mutatingwebhookconfigurations
     verbs:
       - get
-      - create
+      - list
+      - watch
+  - apiGroups:
+      - admissionregistration.k8s.io
+    resources:
+      - mutatingwebhookconfigurations
+    resourceNames:
+      - '${Environment}:envoy-gateway-topology-injector'
+    verbs:
       - update
+      - patch
