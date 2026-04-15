@@ -21,7 +21,7 @@ data:
     kind: EnvoyGateway
     extensionApis: {}
     gateway:
-      controllerName: gateway.envoyproxy.io/gatewayclass-controller
+      controllerName: gateway.envoyproxy.io/${Environment}-gatewayclass-controller
     logging:
       level:
         default: info
