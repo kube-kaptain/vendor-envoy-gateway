@@ -27,6 +27,8 @@ data:
         default: info
     provider:
       kubernetes:
+        deploy:
+          type: GatewayNamespace
         rateLimitDeployment:
           container:
             image: ${EnvironmentDockerRegistryAndNamespace}/${DockerImageName}:${DockerTagRatelimit}

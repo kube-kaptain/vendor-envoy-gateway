@@ -44,6 +44,7 @@ spec:
             patterns:
               - 's|gateway.envoyproxy.io/gatewayclass-controller|gateway.envoyproxy.io/${Environment}-gatewayclass-controller|'
               - 's|^      type: Kubernetes$|      type: Kubernetes\n      watch:\n        type: Namespaces\n        namespaces: [${VendorEnvoyGateway/NamespaceList}]|'
+              - 's|^      kubernetes:$|      kubernetes:\n        deploy:\n          type: GatewayNamespace|'
       yqTransform:
         perFile:
           - file: 'clusterrole-certgen.yaml'
