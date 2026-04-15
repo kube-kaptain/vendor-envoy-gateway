@@ -42,3 +42,6 @@ data:
         shutdownManager:
           image: ${EnvironmentDockerRegistryAndNamespace}/${DockerImageName}:${DockerTagGateway}
       type: Kubernetes
+      watch:
+        type: Namespaces
+        namespaces: [${VendorEnvoyGateway/NamespaceList}]
