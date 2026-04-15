@@ -46,6 +46,7 @@ spec:
               - '.metadata.name = "${Environment}:" + .metadata.name'
           - file: 'clusterrole-envoy-gateway-role.yaml'
             expressions:
+              - '.metadata.name |= sub("-role$", "")'
               - '.metadata.name = "${Environment}:" + .metadata.name'
           - file: 'clusterrolebinding-certgen.yaml'
             expressions:
@@ -55,6 +56,8 @@ spec:
               - '.roleRef.name = "${Environment}:" + .roleRef.name'
           - file: 'clusterrolebinding-envoy-gateway-rolebinding.yaml'
             expressions:
+              - '.metadata.name |= sub("-rolebinding$", "")'
+              - '.roleRef.name |= sub("-role$", "")'
               - '.metadata.name = "${Environment}:" + .metadata.name'
               - '.roleRef.name = "${Environment}:" + .roleRef.name'
       imageRetags:
