@@ -38,6 +38,12 @@ spec:
           destination: 'role-leader-election.yaml'
         - source: 'templates/leader-election-rbac-1.yaml'
           destination: 'rolebinding-leader-election.yaml'
+        - source: 'templates/certgen-rbac-3.yaml'
+          destination: 'role-certgen.yaml'
+        - source: 'templates/certgen-rbac-4.yaml'
+          destination: 'rolebinding-certgen.yaml'
+        - source: 'templates/envoy-proxy-topology-injector-webhook.yaml'
+          destination: 'mutatingwebhookconfiguration-topology-injector.yaml'
       sedReplace:
         perFile:
           - file: 'configmap-envoy-gateway-config.yaml'
@@ -51,6 +57,8 @@ spec:
             expressions:
               - '.metadata.name |= sub(":\$\{Environment\}$", "")'
               - '.metadata.name = "${Environment}:" + .metadata.name'
+              - '.rules[1].resourceNames[0] |= sub("\.\$\{Environment\}$", "")'
+              - '.rules[1].resourceNames[0] = "${Environment}:" + .rules[1].resourceNames[0]'
           - file: 'clusterrole-envoy-gateway.yaml'
             expressions:
               - '.metadata.name |= sub("-role$", "")'
@@ -61,6 +69,11 @@ spec:
               - '.roleRef.name |= sub(":\$\{Environment\}$", "")'
               - '.metadata.name = "${Environment}:" + .metadata.name'
               - '.roleRef.name = "${Environment}:" + .roleRef.name'
+          - file: 'mutatingwebhookconfiguration-topology-injector.yaml'
+            expressions:
+              - '.metadata.name |= sub("\.\$\{Environment\}$", "")'
+              - '.metadata.name = "${Environment}:" + .metadata.name'
+              - '.webhooks[0].namespaceSelector = {"matchLabels": "KAPTAIN_TOPOLOGY_PLACEHOLDER"}'
           - file: 'clusterrolebinding-envoy-gateway.yaml'
             expressions:
               - '.metadata.name |= sub("-rolebinding$", "")'
