@@ -23,9 +23,9 @@ spec:
         - source: 'templates/envoy-gateway-deployment.yaml'
           destination: 'deployment-envoy-gateway.yaml'
         - source: 'templates/envoy-gateway-rbac-0.yaml'
-          destination: 'clusterrole-envoy-gateway-role.yaml'
+          destination: 'clusterrole-envoy-gateway.yaml'
         - source: 'templates/envoy-gateway-rbac-1.yaml'
-          destination: 'clusterrolebinding-envoy-gateway-rolebinding.yaml'
+          destination: 'clusterrolebinding-envoy-gateway.yaml'
         - source: 'templates/envoy-gateway-service.yaml'
           destination: 'service-envoy-gateway.yaml'
         - source: 'templates/envoy-gateway-serviceaccount.yaml'
@@ -44,7 +44,7 @@ spec:
             expressions:
               - '.metadata.name |= sub(":\$\{Environment\}$", "")'
               - '.metadata.name = "${Environment}:" + .metadata.name'
-          - file: 'clusterrole-envoy-gateway-role.yaml'
+          - file: 'clusterrole-envoy-gateway.yaml'
             expressions:
               - '.metadata.name |= sub("-role$", "")'
               - '.metadata.name = "${Environment}:" + .metadata.name'
@@ -54,7 +54,7 @@ spec:
               - '.roleRef.name |= sub(":\$\{Environment\}$", "")'
               - '.metadata.name = "${Environment}:" + .metadata.name'
               - '.roleRef.name = "${Environment}:" + .roleRef.name'
-          - file: 'clusterrolebinding-envoy-gateway-rolebinding.yaml'
+          - file: 'clusterrolebinding-envoy-gateway.yaml'
             expressions:
               - '.metadata.name |= sub("-rolebinding$", "")'
               - '.roleRef.name |= sub("-role$", "")'
