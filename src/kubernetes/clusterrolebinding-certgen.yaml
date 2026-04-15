@@ -2,7 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: 'vendor-envoy-gateway-certgen:${Environment}'
+  name: '${Environment}:vendor-envoy-gateway-certgen'
   labels:
     helm.sh/chart: gateway-helm-1.7.1
     app.kubernetes.io/name: gateway-helm
@@ -19,7 +19,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: 'vendor-envoy-gateway-certgen:${Environment}'
+  name: '${Environment}:vendor-envoy-gateway-certgen'
 subjects:
   - kind: ServiceAccount
     name: 'vendor-envoy-gateway-certgen'

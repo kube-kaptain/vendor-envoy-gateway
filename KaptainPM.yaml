@@ -38,6 +38,25 @@ spec:
           destination: 'role-leader-election.yaml'
         - source: 'templates/leader-election-rbac-1.yaml'
           destination: 'rolebinding-leader-election.yaml'
+      yqTransform:
+        perFile:
+          - file: 'clusterrole-certgen.yaml'
+            expressions:
+              - '.metadata.name |= sub(":\$\{Environment\}$", "")'
+              - '.metadata.name = "${Environment}:" + .metadata.name'
+          - file: 'clusterrole-envoy-gateway-role.yaml'
+            expressions:
+              - '.metadata.name = "${Environment}:" + .metadata.name'
+          - file: 'clusterrolebinding-certgen.yaml'
+            expressions:
+              - '.metadata.name |= sub(":\$\{Environment\}$", "")'
+              - '.roleRef.name |= sub(":\$\{Environment\}$", "")'
+              - '.metadata.name = "${Environment}:" + .metadata.name'
+              - '.roleRef.name = "${Environment}:" + .roleRef.name'
+          - file: 'clusterrolebinding-envoy-gateway-rolebinding.yaml'
+            expressions:
+              - '.metadata.name = "${Environment}:" + .metadata.name'
+              - '.roleRef.name = "${Environment}:" + .roleRef.name'
       imageRetags:
         - sourceImageUri: 'docker.io/envoyproxy/gateway:v1.7.1'
           tagSuffix: 'gateway'
