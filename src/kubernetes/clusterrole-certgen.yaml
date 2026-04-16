@@ -30,7 +30,7 @@ rules:
     resources:
       - mutatingwebhookconfigurations
     resourceNames:
-      - '${Environment}:envoy-gateway-topology-injector'
+      - 'envoy-gateway-topology-injector.${Environment}'
     verbs:
       - update
       - patch
