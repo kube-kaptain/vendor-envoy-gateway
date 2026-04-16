@@ -70,6 +70,10 @@ spec:
           - file: 'deployment-envoy-gateway.yaml'
             expressions:
               - '.metadata.name = "vendor-" + .metadata.name'
+          - file: 'job-certgen.yaml'
+            expressions:
+              - '.metadata.name = .metadata.name + "-${Version}"'
+              - 'del(.spec.ttlSecondsAfterFinished)'
           - file: 'mutatingwebhookconfiguration-topology-injector.yaml'
             expressions:
               - '.webhooks[0].namespaceSelector = {"matchLabels": "KAPTAIN_TOPOLOGY_PLACEHOLDER"}'
