@@ -67,6 +67,9 @@ spec:
               - '.roleRef.name |= sub(":\$\{Environment\}$", "")'
               - '.metadata.name = "${Environment}:" + .metadata.name'
               - '.roleRef.name = "${Environment}:" + .roleRef.name'
+          - file: 'deployment-envoy-gateway.yaml'
+            expressions:
+              - '.metadata.name = "vendor-" + .metadata.name'
           - file: 'mutatingwebhookconfiguration-topology-injector.yaml'
             expressions:
               - '.webhooks[0].namespaceSelector = {"matchLabels": "KAPTAIN_TOPOLOGY_PLACEHOLDER"}'
