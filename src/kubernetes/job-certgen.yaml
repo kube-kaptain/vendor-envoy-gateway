@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: vendor-envoy-gateway-certgen
+  name: vendor-envoy-gateway-certgen-${Version}
   namespace: '${Environment}'
   labels:
     helm.sh/chart: gateway-helm-1.7.1
@@ -55,4 +55,3 @@ spec:
       imagePullSecrets: []
       restartPolicy: Never
       serviceAccountName: vendor-envoy-gateway-certgen
-  ttlSecondsAfterFinished: 30
