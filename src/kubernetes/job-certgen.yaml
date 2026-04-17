@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: vendor-envoy-gateway-certgen-${Version}
+  name: vendor-envoy-gateway-certgen-${VersionDnsSafe}
   namespace: '${Environment}'
   labels:
     helm.sh/chart: gateway-helm-1.7.1

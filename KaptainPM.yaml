@@ -72,7 +72,7 @@ spec:
               - '.metadata.name = "vendor-" + .metadata.name'
           - file: 'job-certgen.yaml'
             expressions:
-              - '.metadata.name = .metadata.name + "-${Version}"'
+              - '.metadata.name = .metadata.name + "-${VersionDnsSafe}"'
               - 'del(.spec.ttlSecondsAfterFinished)'
           - file: 'mutatingwebhookconfiguration-topology-injector.yaml'
             expressions:
