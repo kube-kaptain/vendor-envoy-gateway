@@ -1,0 +1,14 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: ${ProjectName}
+  labels:
+    app.kubernetes.io/version: "${Version}"
+    app.kubernetes.io/managed-by: Kaptain
+    kaptain.org/environment: ${Environment}
+  annotations:
+    kaptain.org/environment: ${Environment}
+    app.kubernetes.io/managed-by: Kaptain
+    app.kubernetes.io/version: ${Version}
+spec:
+  controllerName: gateway.envoyproxy.io/${Environment}-gatewayclass-controller
