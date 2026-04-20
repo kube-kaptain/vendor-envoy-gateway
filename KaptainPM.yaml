@@ -89,7 +89,7 @@ spec:
         - sourceImageUri: 'docker.io/envoyproxy/ratelimit:c8765e89'
           tagSuffix: 'ratelimit'
     hooks:
-      prePackagePrepare: .github/bin/fix-upstream-probes.bash
+      prePackagePrepare: .github/bin/pre-package-prepare.bash
   global:
     release:
       versioning:
