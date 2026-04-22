@@ -34,4 +34,7 @@ webhooks:
         apiVersions: ["v1"]
         resources: ["pods/binding"]
     namespaceSelector:
-      matchLabels: ${VendorEnvoyGateway/TopologyInjectorMatchLabels}
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values: [${VendorEnvoyGateway/MonitoredNamespaceList}]

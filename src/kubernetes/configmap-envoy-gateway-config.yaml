@@ -31,7 +31,7 @@ data:
           type: GatewayNamespace
         rateLimitDeployment:
           container:
-            image: ${EnvironmentDockerRegistryAndNamespace}/${DockerImageName}:${DockerTagRatelimit}
+            image: ${VendorEnvoyGateway/EnvironmentDockerRegistryAndNamespace}/${DockerImageName}:${DockerTagRatelimit}
           patch:
             type: StrategicMerge
             value:
@@ -42,8 +42,8 @@ data:
                     - imagePullPolicy: IfNotPresent
                       name: envoy-ratelimit
         shutdownManager:
-          image: ${EnvironmentDockerRegistryAndNamespace}/${DockerImageName}:${DockerTagGateway}
+          image: ${VendorEnvoyGateway/EnvironmentDockerRegistryAndNamespace}/${DockerImageName}:${DockerTagGateway}
       type: Kubernetes
       watch:
         type: Namespaces
-        namespaces: [${VendorEnvoyGateway/NamespaceList}]
+        namespaces: [${VendorEnvoyGateway/MonitoredNamespaceList}]

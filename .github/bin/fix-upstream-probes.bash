@@ -34,7 +34,9 @@ echo "Probe configuration updated"
 WEBHOOK="${OUTPUT_SUB_PATH}/helm-processing/H-validated/mutatingwebhookconfiguration-topology-injector.yaml"
 
 if [[ -f "${WEBHOOK}" ]]; then
-  echo "Replacing topology injector matchLabels placeholder..."
-  sed 's|matchLabels: KAPTAIN_TOPOLOGY_PLACEHOLDER|matchLabels: ${VendorEnvoyGateway/TopologyInjectorMatchLabels}|' "${WEBHOOK}" > "${WEBHOOK}.tmp" && mv "${WEBHOOK}.tmp" "${WEBHOOK}"
-  echo "Topology injector matchLabels updated"
+  echo "Replacing topology injector namespace values placeholder..."
+  sed -e 's|\["KAPTAIN_NAMESPACES_PLACEHOLDER"\]|[${VendorEnvoyGateway/MonitoredNamespaceList}]|' \
+      -e 's|\[KAPTAIN_NAMESPACES_PLACEHOLDER\]|[${VendorEnvoyGateway/MonitoredNamespaceList}]|' \
+      "${WEBHOOK}" > "${WEBHOOK}.tmp" && mv "${WEBHOOK}.tmp" "${WEBHOOK}"
+  echo "Topology injector namespace values updated"
 fi
