@@ -46,4 +46,4 @@ data:
       type: Kubernetes
       watch:
         type: Namespaces
-        namespaces: [${VendorEnvoyGateway/NamespaceList}]
+        namespaces: [${VendorEnvoyGateway/MonitoredNamespaceList}]

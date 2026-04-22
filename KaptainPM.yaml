@@ -49,7 +49,7 @@ spec:
           - file: 'configmap-envoy-gateway-config.yaml'
             patterns:
               - 's|gateway.envoyproxy.io/gatewayclass-controller|gateway.envoyproxy.io/${Environment}-gatewayclass-controller|'
-              - 's|^      type: Kubernetes$|      type: Kubernetes\n      watch:\n        type: Namespaces\n        namespaces: [${VendorEnvoyGateway/NamespaceList}]|'
+              - 's|^      type: Kubernetes$|      type: Kubernetes\n      watch:\n        type: Namespaces\n        namespaces: [${VendorEnvoyGateway/MonitoredNamespaceList}]|'
               - 's|^      kubernetes:$|      kubernetes:\n        deploy:\n          type: GatewayNamespace|'
       yqTransform:
         perFile:
@@ -76,7 +76,7 @@ spec:
               - 'del(.spec.ttlSecondsAfterFinished)'
           - file: 'mutatingwebhookconfiguration-topology-injector.yaml'
             expressions:
-              - '.webhooks[0].namespaceSelector = {"matchLabels": "KAPTAIN_TOPOLOGY_PLACEHOLDER"}'
+              - '.webhooks[0].namespaceSelector = {"matchExpressions": [{"key": "kubernetes.io/metadata.name", "operator": "In", "values": ["KAPTAIN_NAMESPACES_PLACEHOLDER"]}]} | .webhooks[0].namespaceSelector.matchExpressions[0].values style = "flow"'
           - file: 'clusterrolebinding-envoy-gateway.yaml'
             expressions:
               - '.metadata.name |= sub("-rolebinding$", "")'
