@@ -45,7 +45,7 @@ spec:
                   fieldPath: metadata.namespace
             - name: KUBERNETES_CLUSTER_DOMAIN
               value: cluster.local
-          image: ${EnvironmentDockerRegistryAndNamespace}/${DockerImageName}:${DockerTagGateway}
+          image: ${VendorEnvoyGateway/EnvironmentDockerRegistryAndNamespace}/${DockerImageName}:${DockerTagGateway}
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
