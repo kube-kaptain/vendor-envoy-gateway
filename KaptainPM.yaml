@@ -1,4 +1,4 @@
-apiVersion: kaptain.org/1.16
+apiVersion: kaptain.org/1.18
 kind: kubernetes-bundle-vendor-helm-rendered
 metadata:
   description: "Vendored Envoy Gateway helm chart rendered to plain kubernetes manifests"
@@ -55,7 +55,7 @@ spec:
         perFile:
           - file: 'clusterrole-certgen.yaml'
             expressions:
-              - '.metadata.name |= sub(":\$\{Environment\}$", "")'
+              - '.metadata.name |= sub(":[^:]*$", "")'
               - '.metadata.name = "${Environment}:" + .metadata.name'
           - file: 'clusterrole-envoy-gateway.yaml'
             expressions:
@@ -64,8 +64,8 @@ spec:
               - '.rules += [{"apiGroups": ["authentication.k8s.io"], "resources": ["tokenreviews"], "verbs": ["create"]}, {"apiGroups": ["authorization.k8s.io"], "resources": ["subjectaccessreviews"], "verbs": ["create"]}]'
           - file: 'clusterrolebinding-certgen.yaml'
             expressions:
-              - '.metadata.name |= sub(":\$\{Environment\}$", "")'
-              - '.roleRef.name |= sub(":\$\{Environment\}$", "")'
+              - '.metadata.name |= sub(":[^:]*$", "")'
+              - '.roleRef.name |= sub(":[^:]*$", "")'
               - '.metadata.name = "${Environment}:" + .metadata.name'
               - '.roleRef.name = "${Environment}:" + .roleRef.name'
           - file: 'deployment-envoy-gateway.yaml'
