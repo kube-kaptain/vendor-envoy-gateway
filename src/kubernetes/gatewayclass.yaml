@@ -3,12 +3,18 @@ kind: GatewayClass
 metadata:
   name: ${ProjectName}.${Environment}
   labels:
+    app: ${ProjectName}.${Environment}
+    app.kubernetes.io/name: ${ProjectName}.${Environment}
     app.kubernetes.io/version: "${Version}"
     app.kubernetes.io/managed-by: Kaptain
+    app.kubernetes.io/part-of: ${ProductName}
     kaptain.org/environment: ${Environment}
+    kaptain.org/product: ${ProductName}
+    kaptain.org/project-name: ${ProjectName}
+    kaptain.org/version: "${Version}"
+    kaptain.org/owner: kube-kaptain
   annotations:
-    kaptain.org/environment: ${Environment}
-    app.kubernetes.io/managed-by: Kaptain
-    app.kubernetes.io/version: ${Version}
+    kaptain.org/source-repository: kube-kaptain/vendor-envoy-gateway
+    kaptain.org/generated-by: Hand-authored
 spec:
   controllerName: gateway.envoyproxy.io/${Environment}-gatewayclass-controller
