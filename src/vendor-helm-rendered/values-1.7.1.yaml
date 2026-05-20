@@ -43,7 +43,7 @@ deployment:
       limits:
         memory: "${VendorEnvoyGateway/Memory}"
       requests:
-        cpu: "${VendorEnvoyGateway/Cpu}"
+        cpu: "${VendorEnvoyGateway/CpuRequest}"
         memory: "${VendorEnvoyGateway/Memory}"
     securityContext:
       allowPrivilegeEscalation: false
