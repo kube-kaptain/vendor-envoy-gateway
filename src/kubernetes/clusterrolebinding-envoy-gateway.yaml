@@ -2,10 +2,10 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: ${Environment}:vendor-envoy-gateway-envoy-gateway
+  name: ${Environment}.vendor-envoy-gateway-envoy-gateway
   labels:
-    app: ${Environment}:vendor-envoy-gateway-envoy-gateway
-    app.kubernetes.io/name: ${Environment}:vendor-envoy-gateway-envoy-gateway
+    app: ${Environment}.vendor-envoy-gateway-envoy-gateway
+    app.kubernetes.io/name: ${Environment}.vendor-envoy-gateway-envoy-gateway
     app.kubernetes.io/version: "${Version}"
     app.kubernetes.io/managed-by: Kaptain
     app.kubernetes.io/part-of: ${ProductName}
@@ -21,7 +21,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: ${Environment}:vendor-envoy-gateway-envoy-gateway
+  name: ${Environment}.vendor-envoy-gateway-envoy-gateway
 subjects:
   - kind: ServiceAccount
     name: 'envoy-gateway'

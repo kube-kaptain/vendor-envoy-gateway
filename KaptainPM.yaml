@@ -56,18 +56,18 @@ spec:
           - file: 'clusterrole-certgen.yaml'
             expressions:
               - '.metadata.name |= sub(":[^:]*$", "")'
-              - '.metadata.name = "${Environment}:" + .metadata.name'
+              - '.metadata.name = "${Environment}." + .metadata.name'
           - file: 'clusterrole-envoy-gateway.yaml'
             expressions:
               - '.metadata.name |= sub("-role$", "")'
-              - '.metadata.name = "${Environment}:" + .metadata.name'
+              - '.metadata.name = "${Environment}." + .metadata.name'
               - '.rules += [{"apiGroups": ["authentication.k8s.io"], "resources": ["tokenreviews"], "verbs": ["create"]}, {"apiGroups": ["authorization.k8s.io"], "resources": ["subjectaccessreviews"], "verbs": ["create"]}]'
           - file: 'clusterrolebinding-certgen.yaml'
             expressions:
               - '.metadata.name |= sub(":[^:]*$", "")'
               - '.roleRef.name |= sub(":[^:]*$", "")'
-              - '.metadata.name = "${Environment}:" + .metadata.name'
-              - '.roleRef.name = "${Environment}:" + .roleRef.name'
+              - '.metadata.name = "${Environment}." + .metadata.name'
+              - '.roleRef.name = "${Environment}." + .roleRef.name'
           - file: 'deployment-envoy-gateway.yaml'
             expressions:
               - '.metadata.name = "vendor-" + .metadata.name'
@@ -82,8 +82,8 @@ spec:
             expressions:
               - '.metadata.name |= sub("-rolebinding$", "")'
               - '.roleRef.name |= sub("-role$", "")'
-              - '.metadata.name = "${Environment}:" + .metadata.name'
-              - '.roleRef.name = "${Environment}:" + .roleRef.name'
+              - '.metadata.name = "${Environment}." + .metadata.name'
+              - '.roleRef.name = "${Environment}." + .roleRef.name'
       imageRetags:
         - sourceImageUri: 'docker.io/envoyproxy/gateway:v1.7.1'
           tagSuffix: 'gateway'
