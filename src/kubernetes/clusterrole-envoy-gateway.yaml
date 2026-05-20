@@ -3,10 +3,10 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   creationTimestamp: null
-  name: ${Environment}:vendor-envoy-gateway-envoy-gateway
+  name: ${Environment}.vendor-envoy-gateway-envoy-gateway
   labels:
-    app: ${Environment}:vendor-envoy-gateway-envoy-gateway
-    app.kubernetes.io/name: ${Environment}:vendor-envoy-gateway-envoy-gateway
+    app: ${Environment}.vendor-envoy-gateway-envoy-gateway
+    app.kubernetes.io/name: ${Environment}.vendor-envoy-gateway-envoy-gateway
     app.kubernetes.io/version: "${Version}"
     app.kubernetes.io/managed-by: Kaptain
     app.kubernetes.io/part-of: ${ProductName}

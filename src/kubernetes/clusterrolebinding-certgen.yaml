@@ -2,13 +2,13 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: '${Environment}:vendor-envoy-gateway-certgen'
+  name: '${Environment}.vendor-envoy-gateway-certgen'
   labels:
-    app.kubernetes.io/name: '${Environment}:vendor-envoy-gateway-certgen'
+    app.kubernetes.io/name: '${Environment}.vendor-envoy-gateway-certgen'
     app.kubernetes.io/instance: vendor-envoy-gateway
     app.kubernetes.io/version: "${Version}"
     app.kubernetes.io/managed-by: Kaptain
-    app: '${Environment}:vendor-envoy-gateway-certgen'
+    app: '${Environment}.vendor-envoy-gateway-certgen'
     app.kubernetes.io/part-of: ${ProductName}
     kaptain.org/environment: ${Environment}
     kaptain.org/product: ${ProductName}
@@ -22,7 +22,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: '${Environment}:vendor-envoy-gateway-certgen'
+  name: '${Environment}.vendor-envoy-gateway-certgen'
 subjects:
   - kind: ServiceAccount
     name: 'vendor-envoy-gateway-certgen'
