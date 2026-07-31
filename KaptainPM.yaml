@@ -1,11 +1,11 @@
-apiVersion: kaptain.org/1.18
+apiVersion: kaptain.org/1.23
 kind: kubernetes-bundle-vendor-helm-rendered
 metadata:
   description: "Vendored Envoy Gateway helm chart rendered to plain kubernetes manifests"
 
 spec:
   layers:
-    - layer-github-flow-strict:[1.3,2.0)
+    - layer-github-flow-strict:[1.3]
   main:
     vendorHelmRendered:
       ociChart: 'oci://docker.io/envoyproxy/gateway-helm'
@@ -71,10 +71,22 @@ spec:
           - file: 'deployment-envoy-gateway.yaml'
             expressions:
               - '.metadata.name = "vendor-" + .metadata.name'
+              # The rename above has to carry the app labels with it: they are
+              # what reaches the ReplicaSet and Pods, so they must equal
+              # metadata.name. Derived from it rather than prefixed again so
+              # they cannot drift apart.
+              - '.spec.template.metadata.labels.app = .metadata.name'
+              - '.spec.template.metadata.labels."app.kubernetes.io/name" = .metadata.name'
+              - '.spec.selector.matchLabels."app.kubernetes.io/name" = .metadata.name'
           - file: 'job-certgen.yaml'
             expressions:
               - '.metadata.name = .metadata.name + "-${VersionDnsSafe}"'
               - 'del(.spec.ttlSecondsAfterFinished)'
+          - file: 'service-envoy-gateway.yaml'
+            expressions:
+              # Follows the deployment rename above - this selector targets
+              # those pods, so it has to move with their labels.
+              - '.spec.selector."app.kubernetes.io/name" = "vendor-" + .spec.selector."app.kubernetes.io/name"'
           - file: 'mutatingwebhookconfiguration-topology-injector.yaml'
             expressions:
               - '.webhooks[0].namespaceSelector = {"matchExpressions": [{"key": "kubernetes.io/metadata.name", "operator": "In", "values": ["KAPTAIN_NAMESPACES_PLACEHOLDER"]}]} | .webhooks[0].namespaceSelector.matchExpressions[0].values style = "flow"'

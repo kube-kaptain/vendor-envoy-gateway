@@ -6,11 +6,11 @@ metadata:
   namespace: '${Environment}'
   labels:
     control-plane: envoy-gateway
-    app.kubernetes.io/name: vendor-envoy-gateway
+    app.kubernetes.io/name: ${ProjectName}
     app.kubernetes.io/instance: vendor-envoy-gateway
     app.kubernetes.io/version: "${Version}"
     app.kubernetes.io/managed-by: Kaptain
-    app: vendor-envoy-gateway
+    app: ${ProjectName}
     app.kubernetes.io/part-of: ${ProductName}
     kaptain.org/environment: ${Environment}
     kaptain.org/product: ${ProductName}
@@ -26,7 +26,7 @@ spec:
   selector:
     matchLabels:
       control-plane: envoy-gateway
-      app.kubernetes.io/name: gateway-helm
+      app.kubernetes.io/name: vendor-envoy-gateway
       app.kubernetes.io/instance: vendor-envoy-gateway
   template:
     metadata:
@@ -35,8 +35,9 @@ spec:
         prometheus.io/scrape: "true"
       labels:
         control-plane: envoy-gateway
-        app.kubernetes.io/name: gateway-helm
+        app.kubernetes.io/name: vendor-envoy-gateway
         app.kubernetes.io/instance: vendor-envoy-gateway
+        app: vendor-envoy-gateway
     spec:
       containers:
         - args:
