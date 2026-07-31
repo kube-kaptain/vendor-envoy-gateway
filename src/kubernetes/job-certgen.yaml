@@ -2,14 +2,14 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: vendor-envoy-gateway-certgen-${VersionDnsSafe}
+  name: ${ProjectName}-certgen-${VersionDnsSafe}
   namespace: '${Environment}'
   labels:
-    app.kubernetes.io/name: vendor-envoy-gateway-certgen-${VersionDnsSafe}
+    app.kubernetes.io/name: ${ProjectName}
     app.kubernetes.io/instance: vendor-envoy-gateway
     app.kubernetes.io/version: "${Version}"
     app.kubernetes.io/managed-by: Kaptain
-    app: vendor-envoy-gateway-certgen-${VersionDnsSafe}
+    app: ${ProjectName}
     app.kubernetes.io/part-of: ${ProductName}
     kaptain.org/environment: ${Environment}
     kaptain.org/product: ${ProductName}
@@ -58,4 +58,4 @@ spec:
               type: RuntimeDefault
       imagePullSecrets: []
       restartPolicy: Never
-      serviceAccountName: vendor-envoy-gateway-certgen
+      serviceAccountName: ${ProjectName}-certgen

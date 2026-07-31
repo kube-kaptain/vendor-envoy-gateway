@@ -9,11 +9,11 @@ metadata:
     kaptain.org/source-repository: kube-kaptain/vendor-envoy-gateway
   labels:
     app.kubernetes.io/component: topology-injector
-    app.kubernetes.io/name: 'envoy-gateway-topology-injector.${Environment}'
+    app.kubernetes.io/name: ${ProjectName}
     app.kubernetes.io/instance: vendor-envoy-gateway
     app.kubernetes.io/version: "${Version}"
     app.kubernetes.io/managed-by: Kaptain
-    app: 'envoy-gateway-topology-injector.${Environment}'
+    app: ${ProjectName}
     app.kubernetes.io/part-of: ${ProductName}
     kaptain.org/environment: ${Environment}
     kaptain.org/product: ${ProductName}
