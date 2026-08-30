@@ -97,9 +97,9 @@ spec:
               - '.metadata.name = "${Environment}." + .metadata.name'
               - '.roleRef.name = "${Environment}." + .roleRef.name'
       imageRetags:
-        - sourceImageUri: 'docker.io/envoyproxy/gateway:v1.7.1'
+        - sourceImageUri: 'docker.io/envoyproxy/gateway:v1.7.5'
           tagSuffix: 'gateway'
-        - sourceImageUri: 'docker.io/envoyproxy/ratelimit:c8765e89'
+        - sourceImageUri: 'docker.io/envoyproxy/ratelimit:f2fb1577'
           tagSuffix: 'ratelimit'
     hooks:
       prePackagePrepare: .github/bin/pre-package-prepare.bash
